@@ -1,9 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
 import '../functions.dart';
-
 
 enum TrimMode {
   Length,
@@ -17,7 +14,6 @@ const String _kLineSeparator = '\u2028';
 ///
 /// [onTap] is called when a tagged text is tapped.
 class DetectableText extends StatefulWidget {
-
   DetectableText({
     required this.text,
     required this.detectionRegExp,
@@ -64,6 +60,7 @@ class DetectableText extends StatefulWidget {
   final TextHeightBehavior? textHeightBehavior;
   final RegExp detectionRegExp;
   final String delimiter;
+
   /// Used on TrimMode.Length
   final int trimLength;
 
@@ -124,8 +121,8 @@ class _DetectableTextState extends State<DetectableText> {
     TextSpan _delimiter = TextSpan(
       text: _readMore
           ? widget.trimCollapsedText.isNotEmpty
-          ? widget.delimiter
-          : ''
+              ? widget.delimiter
+              : ''
           : '',
       style: _defaultDelimiterStyle,
       recognizer: TapGestureRecognizer()..onTap = _onTapLink,
@@ -201,19 +198,19 @@ class _DetectableTextState extends State<DetectableText> {
               //   children: <TextSpan>[_delimiter, link],
               // );
 
-              textSpan =  getDetectedTextSpanWithExtraChild(
+              textSpan = getDetectedTextSpanWithExtraChild(
                 decoratedStyle: dStyle,
                 basicStyle: style,
                 onTap: widget.onTap,
                 source: _readMore
                     ? widget.text.substring(0, widget.trimLength) +
-                    (linkLongerThanLine ? _kLineSeparator : '')
+                        (linkLongerThanLine ? _kLineSeparator : '')
                     : widget.text,
                 detectionRegExp: widget.detectionRegExp,
                 children: <TextSpan>[_delimiter, link],
               );
             } else {
-              textSpan =  getDetectedTextSpan(
+              textSpan = getDetectedTextSpan(
                 decoratedStyle: dStyle,
                 basicStyle: style,
                 onTap: widget.onTap,
@@ -233,19 +230,19 @@ class _DetectableTextState extends State<DetectableText> {
               //   children: <TextSpan>[_delimiter, link],
               // );
 
-              textSpan =  getDetectedTextSpanWithExtraChild(
+              textSpan = getDetectedTextSpanWithExtraChild(
                 decoratedStyle: dStyle,
                 basicStyle: style,
                 onTap: widget.onTap,
                 source: _readMore
                     ? widget.text.substring(0, endIndex) +
-                    (linkLongerThanLine ? _kLineSeparator : '')
+                        (linkLongerThanLine ? _kLineSeparator : '')
                     : widget.text,
                 detectionRegExp: widget.detectionRegExp,
                 children: <TextSpan>[_delimiter, link],
               );
             } else {
-              textSpan =  getDetectedTextSpan(
+              textSpan = getDetectedTextSpan(
                 decoratedStyle: dStyle,
                 basicStyle: style,
                 onTap: widget.onTap,

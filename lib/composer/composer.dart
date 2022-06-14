@@ -1,5 +1,4 @@
 import 'package:detectable_text_field/detector/detector.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Add composing to hashtag decorated text.
@@ -22,6 +21,7 @@ class Composer {
   final TextStyle detectedStyle;
   final ValueChanged<String>? onDetectionTyped;
 
+  // ignore: todo
   // TODO(Takahashi): Add test code for composing
   TextSpan getComposedTextSpan() {
     final span = detections.map(
