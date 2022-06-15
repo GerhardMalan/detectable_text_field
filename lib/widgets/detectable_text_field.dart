@@ -5,7 +5,7 @@
 import 'dart:ui' as ui show BoxHeightStyle, BoxWidthStyle;
 
 import 'package:detectable_text_field/detectable_text_field.dart';
-import 'package:detectable_text_field/detector/detector.dart';
+// import 'package:detectable_text_field/detector/detector.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
-import 'detectable_editable_text.dart';
+// import 'detectable_editable_text.dart';
 
 export 'package:flutter/services.dart'
     show
