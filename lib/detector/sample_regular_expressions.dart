@@ -72,6 +72,14 @@ final atSignUrlRegExp = RegExp(
   multiLine: true,
 );
 
+//'?([a-zA-Z0-9-¥Œ€@™#-\&_'-]+)'?
+
+final wordsRegExp = RegExp(r"'?([a-zA-Z0-9-¥Œ€@™#-\&_'-]{2,})'?");
+//  RegExp(
+//   "'?([$detectionContentLetters]{3,})'?",
+//   multiLine: true,
+// );
+
 RegExp? detectionRegExp({
   bool hashtag = true,
   bool atSign = true,

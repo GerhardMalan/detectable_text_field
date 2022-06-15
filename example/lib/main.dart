@@ -80,7 +80,7 @@ class MyHomePage extends StatelessWidget {
               DetectableTextField(
                 maxLines: null,
                 detectionRegExp: detectionRegExp()!,
-                onDetectionTyped: (text) {
+                onDetectableTypedText: (text) {
                   print(text);
                 },
                 onDetectionFinished: () {

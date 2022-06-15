@@ -19,6 +19,7 @@ class DetectableText extends StatefulWidget {
     required this.detectionRegExp,
     this.basicStyle,
     this.detectedStyle,
+    this.detectedStyleCallback,
     this.onTap,
     this.alwaysDetectTap = false,
     this.textAlign = TextAlign.start,
@@ -64,6 +65,13 @@ class DetectableText extends StatefulWidget {
   /// Used on TrimMode.Length
   final int trimLength;
 
+  /// A callback function that returns a [TextStyle] for detected text, passing
+  /// in the [DetectableText.text]. The [TextStyle] returned by the
+  /// [detectedStyleCallback] has the highest priority in styling detected
+  /// text, followed by [detectedStyle] and then [basicStyle] or the current
+  /// theme's [TextTheme.subtitle1] with blue color.
+  final TextStyle Function(String)? detectedStyleCallback;
+
   /// Used on TrimMode.Lines
   final int trimLines;
 
@@ -104,7 +112,6 @@ class _DetectableTextState extends State<DetectableText> {
     final theme = Theme.of(context);
     final TextStyle style = theme.textTheme.subtitle1!.merge(widget.basicStyle);
     final dStyle = widget.detectedStyle ?? style.copyWith(color: Colors.blue);
-
     final _defaultLessStyle = widget.lessStyle ?? style;
     final _defaultMoreStyle = widget.moreStyle ?? style;
     final textDirection = widget.textDirection ?? Directionality.of(context);
@@ -136,6 +143,7 @@ class _DetectableTextState extends State<DetectableText> {
         // Create a TextSpan with data
         final text = getDetectedTextSpan(
           decoratedStyle: dStyle,
+          detectedStyleCallback: widget.detectedStyleCallback,
           basicStyle: style,
           onTap: widget.onTap,
           source: widget.text,
@@ -200,6 +208,7 @@ class _DetectableTextState extends State<DetectableText> {
 
               textSpan = getDetectedTextSpanWithExtraChild(
                 decoratedStyle: dStyle,
+                detectedStyleCallback: widget.detectedStyleCallback,
                 basicStyle: style,
                 onTap: widget.onTap,
                 source: _readMore
@@ -212,6 +221,7 @@ class _DetectableTextState extends State<DetectableText> {
             } else {
               textSpan = getDetectedTextSpan(
                 decoratedStyle: dStyle,
+                detectedStyleCallback: widget.detectedStyleCallback,
                 basicStyle: style,
                 onTap: widget.onTap,
                 source: widget.text,
@@ -232,6 +242,7 @@ class _DetectableTextState extends State<DetectableText> {
 
               textSpan = getDetectedTextSpanWithExtraChild(
                 decoratedStyle: dStyle,
+                detectedStyleCallback: widget.detectedStyleCallback,
                 basicStyle: style,
                 onTap: widget.onTap,
                 source: _readMore
@@ -244,6 +255,7 @@ class _DetectableTextState extends State<DetectableText> {
             } else {
               textSpan = getDetectedTextSpan(
                 decoratedStyle: dStyle,
+                detectedStyleCallback: widget.detectedStyleCallback,
                 basicStyle: style,
                 onTap: widget.onTap,
                 source: widget.text,

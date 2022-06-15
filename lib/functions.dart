@@ -8,6 +8,7 @@ bool isDetected(String value, RegExp detectionRegExp) {
   final decoratedTextColor = Colors.blue;
   final detector = Detector(
     textStyle: TextStyle(),
+    detectedStyleCallback: null,
     detectedStyle: TextStyle(
       color: decoratedTextColor,
     ),
@@ -25,6 +26,7 @@ List<String> extractDetections(String value, RegExp detectionRegExp) {
   final decoratedTextColor = Colors.blue;
   final decorator = Detector(
     textStyle: TextStyle(),
+    detectedStyleCallback: null,
     detectedStyle: TextStyle(color: decoratedTextColor),
     detectionRegExp: detectionRegExp,
   );
@@ -44,6 +46,7 @@ List<String> extractDetections(String value, RegExp detectionRegExp) {
 /// Used in [DetectableText]
 TextSpan getDetectedTextSpan({
   required TextStyle decoratedStyle,
+  required TextStyle Function(String)? detectedStyleCallback,
   required TextStyle basicStyle,
   required String source,
   required RegExp detectionRegExp,
@@ -53,6 +56,7 @@ TextSpan getDetectedTextSpan({
 }) {
   final detections = Detector(
     detectedStyle: decoratedStyle,
+    detectedStyleCallback: detectedStyleCallback,
     textStyle: basicStyle,
     detectionRegExp: detectionRegExp,
   ).getDetections(source);
@@ -90,6 +94,7 @@ TextSpan getDetectedTextSpan({
 
 TextSpan getDetectedTextSpanWithExtraChild(
     {required TextStyle decoratedStyle,
+    required TextStyle Function(String)? detectedStyleCallback,
     required TextStyle basicStyle,
     required String source,
     required RegExp detectionRegExp,
@@ -98,6 +103,7 @@ TextSpan getDetectedTextSpanWithExtraChild(
     List<InlineSpan>? children}) {
   final detections = Detector(
     detectedStyle: decoratedStyle,
+    detectedStyleCallback: detectedStyleCallback,
     textStyle: basicStyle,
     detectionRegExp: detectionRegExp,
   ).getDetections(source);

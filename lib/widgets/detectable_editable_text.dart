@@ -5,6 +5,8 @@ import 'package:detectable_text_field/detector/detector.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
+// import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 /// Show detected text while user is inputting text.
 ///
@@ -16,9 +18,11 @@ class DetectableEditableText extends EditableText {
     required TextEditingController controller,
     required TextStyle basicStyle,
     required this.detectedStyle,
+    required this.detectedStyleCallback,
     required this.detectionRegExp,
     required Color cursorColor,
-    required this.onDetectionTyped,
+    required this.onDetectableTypedText,
+    required this.onDetectableTyped,
     required this.onDetectionFinished,
     ValueChanged<String>? onChanged,
     ValueChanged<String>? onSubmitted,
@@ -137,11 +141,31 @@ class DetectableEditableText extends EditableText {
           cursorHeight: cursorHeight,
         );
 
+  /// TextStyle of detected text.
+  ///
+  /// Will be used if [detectedStyleCallback] is null. If both [detectedStyle]
+  /// and [detectedStyleCallback] are null, defaults to current theme's
+  /// [TextTheme.subtitle1] merged with [basicStyle] and blue color.
+  /// ```dart
+  /// Theme.of(context).textTheme
+  ///     .subtitle1!
+  ///     .merge(widget.basicStyle)
+  ///     .copyWith(color: Colors.blue);
+  /// ```
   final TextStyle detectedStyle;
+
+  /// A callback function that returns a [TextStyle] for detected text, passing
+  /// in the [DetectableText.text]. The [TextStyle] returned by the
+  /// [detectedStyleCallback] has the highest priority in styling detected
+  /// text, followed by [detectedStyle] and then [basicStyle] or the current
+  /// theme's [TextTheme.subtitle1] with blue color.
+  final TextStyle Function(String)? detectedStyleCallback;
 
   final RegExp detectionRegExp;
 
-  final ValueChanged<String>? onDetectionTyped;
+  final ValueChanged<String>? onDetectableTypedText;
+
+  final ValueChanged<Detection>? onDetectableTyped;
 
   final VoidCallback? onDetectionFinished;
 
@@ -166,6 +190,7 @@ class DetectableEditableTextState extends EditableTextState {
     detector = Detector(
       textStyle: widget.style,
       detectedStyle: widget.detectedStyle,
+      detectedStyleCallback: widget.detectedStyleCallback,
       detectionRegExp: widget.detectionRegExp,
     );
     widget.controller.addListener(() {
@@ -177,9 +202,12 @@ class DetectableEditableTextState extends EditableTextState {
     final detections = detector.getDetections(textEditingValue.text);
     final composer = Composer(
       selection: textEditingValue.selection.start,
-      onDetectionTyped: widget.onDetectionTyped,
+      onDetectableTyped: widget.onDetectableTyped,
+      onDetectableTypedText: widget.onDetectableTypedText,
       sourceText: textEditingValue.text,
-      detectedStyle: widget.detectedStyle,
+      // detectedStyle: widget.detectedStyle,
+      detectedStyleCallback:
+          widget.detectedStyleCallback ?? (e) => widget.detectedStyle,
       detections: detections,
       composing: textEditingValue.composing,
     );
@@ -192,9 +220,7 @@ class DetectableEditableTextState extends EditableTextState {
     if (detections.isNotEmpty) {
       /// use [dComposer] to show composing underline
       detections.sort();
-      if (widget.onDetectionTyped != null) {
-        composer.callOnDetectionTyped();
-      }
+      composer.callOnDetectionTyped();
     }
   }
 
@@ -203,9 +229,12 @@ class DetectableEditableTextState extends EditableTextState {
     final detections = detector.getDetections(textEditingValue.text);
     final composer = Composer(
       selection: textEditingValue.selection.start,
-      onDetectionTyped: widget.onDetectionTyped,
+      onDetectableTyped: widget.onDetectableTyped,
+      onDetectableTypedText: widget.onDetectableTypedText,
       sourceText: textEditingValue.text,
-      detectedStyle: widget.detectedStyle,
+      // detectedStyle: widget.detectedStyle,
+      detectedStyleCallback:
+          widget.detectedStyleCallback ?? (e) => widget.detectedStyle,
       detections: detections,
       composing: textEditingValue.composing,
     );

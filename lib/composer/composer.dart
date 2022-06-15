@@ -5,21 +5,32 @@ import 'package:flutter/material.dart';
 ///
 /// Expected to be used when Japanese letters are typed.
 class Composer {
-  Composer({
-    required this.sourceText,
-    required this.detections,
-    required this.composing,
-    required this.selection,
-    required this.detectedStyle,
-    required this.onDetectionTyped,
-  });
+  Composer(
+      {required this.sourceText,
+      required this.detections,
+      required this.composing,
+      required this.selection,
+      // required this.detectedStyle,
+      required this.detectedStyleCallback,
+      required this.onDetectableTypedText,
+      required this.onDetectableTyped});
 
   final String sourceText;
   final List<Detection?> detections;
   final TextRange composing;
   final int selection;
-  final TextStyle detectedStyle;
-  final ValueChanged<String>? onDetectionTyped;
+  // TextStyle? detectedStyle;
+
+  /// A callback function that returns a [TextStyle] for detected text, passing
+  /// in the [DetectableText.text]. The [TextStyle] returned by the
+  /// [detectedStyleCallback] has the highest priority in styling detected
+  /// text, followed by [detectedStyle] and then [basicStyle] or the current
+  /// theme's [TextTheme.subtitle1] with blue color.
+  final TextStyle Function(String) detectedStyleCallback;
+
+  final ValueChanged<String>? onDetectableTypedText;
+
+  final ValueChanged<Detection>? onDetectableTyped;
 
   // ignore: todo
   // TODO(Takahashi): Add test code for composing
@@ -86,12 +97,13 @@ class Composer {
   }
 
   Detection? typingDetection() {
-    final res = detections.where(
-      (detection) =>
-          detection!.style == detectedStyle &&
+    final res = detections.where((detection) {
+      final style =
+          detectedStyleCallback(detection!.range.textInside(sourceText));
+      return detection.style == style &&
           detection.range.start <= selection &&
-          detection.range.end >= selection,
-    );
+          detection.range.end >= selection;
+    });
     if (res.isNotEmpty) {
       return res.first;
     } else {
@@ -100,9 +112,15 @@ class Composer {
   }
 
   void callOnDetectionTyped() {
-    final typingRange = typingDetection()?.range;
-    if (typingRange != null) {
-      onDetectionTyped!(typingRange.textInside(sourceText));
+    final detection = typingDetection();
+    if (detection != null) {
+      final typingRange = detection.range;
+      if (onDetectableTypedText != null) {
+        onDetectableTypedText!(typingRange.textInside(sourceText));
+      }
+      if (onDetectableTyped != null) {
+        onDetectableTyped!(detection);
+      }
     }
   }
 }

@@ -7,7 +7,7 @@
 - fixed errors occurred on flutter 2.2.x
 
 ## [2.0.1] 
-- fixed error occurred in onDetectionFinished and onDetectionTyped.
+- fixed error occurred in onDetectionFinished and onDetectableTypedText.
 
 ## [2.0.0] 
 - supported null safety
@@ -20,7 +20,7 @@
 
 ## [0.3.0] - added sample regular expression of url detection
 
-## [0.2.0] - add `onDetectionTyped`
+## [0.2.0] - add `onDetectableTypedText`
 
 ## [0.1.0] - initial release
 

@@ -19,10 +19,18 @@ class Detection extends Comparable<Detection> {
 /// Return the list of [Detection] in [getDetections]
 class Detector {
   final TextStyle textStyle;
-  final TextStyle detectedStyle;
+  final TextStyle? detectedStyle;
   final RegExp detectionRegExp;
 
+  /// A callback function that returns a [TextStyle] for detected text, passing
+  /// in the [DetectableText.text]. The [TextStyle] returned by the
+  /// [detectedStyleCallback] has the highest priority in styling detected
+  /// text, followed by [decoratedStyle] and then [basicStyle] or the current
+  /// theme's [TextTheme.subtitle1] with blue color.
+  final TextStyle Function(String)? detectedStyleCallback;
+
   Detector({
+    required this.detectedStyleCallback,
     required this.textStyle,
     required this.detectedStyle,
     required this.detectionRegExp,
@@ -46,9 +54,13 @@ class Detector {
       }
 
       ///Add detected content
+      final text =
+          TextRange(start: tag.start, end: tag.end).textInside(copiedText);
+      final style = detectedStyleCallback == null
+          ? detectedStyle
+          : detectedStyleCallback!(text);
       result.add(Detection(
-          range: TextRange(start: tag.start, end: tag.end),
-          style: detectedStyle));
+          range: TextRange(start: tag.start, end: tag.end), style: style));
       previousItem = TextRange(start: tag.start, end: tag.end);
     }
 

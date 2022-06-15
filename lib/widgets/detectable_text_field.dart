@@ -4,6 +4,8 @@
 
 import 'dart:ui' as ui show BoxHeightStyle, BoxWidthStyle;
 
+import 'package:detectable_text_field/detectable_text_field.dart';
+import 'package:detectable_text_field/detector/detector.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -104,8 +106,8 @@ class _TextFieldSelectionGestureDetectorBuilder
               // of the word.
               renderEditable.selectWordEdge(cause: SelectionChangedCause.tap);
               break;
-            case PointerDeviceKind.trackpad:
-              break;
+            // case PointerDeviceKind.trackpad:
+            //   break;
           }
           break;
         case TargetPlatform.android:
@@ -329,8 +331,10 @@ class DetectableTextField extends StatefulWidget {
     Key? key,
     required this.detectionRegExp,
     this.decoratedStyle,
+    this.detectedStyleCallback,
     this.onDetectionFinished,
-    this.onDetectionTyped,
+    this.onDetectableTypedText,
+    this.onDetectableTyped,
     this.basicStyle,
     this.controller,
     this.focusNode,
@@ -431,12 +435,31 @@ class DetectableTextField extends StatefulWidget {
                   )),
         super(key: key);
 
-  final ValueChanged<String>? onDetectionTyped;
+  final ValueChanged<String>? onDetectableTypedText;
+
+  final ValueChanged<Detection>? onDetectableTyped;
 
   final VoidCallback? onDetectionFinished;
 
-  /// TextStyle of hashTag
+  /// TextStyle of detected text.
+  ///
+  /// Will be used if [detectedStyleCallback] is null. If both [decoratedStyle]
+  /// and [detectedStyleCallback] are null, defaults to current theme's
+  /// [TextTheme.subtitle1] merged with [basicStyle] and blue color.
+  /// ```dart
+  /// Theme.of(context).textTheme
+  ///     .subtitle1!
+  ///     .merge(widget.basicStyle)
+  ///     .copyWith(color: Colors.blue);
+  /// ```
   final TextStyle? decoratedStyle;
+
+  /// A callback function that returns a [TextStyle] for detected text, passing
+  /// in the [DetectableText.text]. The [TextStyle] returned by the
+  /// [detectedStyleCallback] has the highest priority in styling detected
+  /// text, followed by [decoratedStyle] and then [basicStyle] or the current
+  /// theme's [TextTheme.subtitle1] with blue color.
+  final TextStyle Function(String)? detectedStyleCallback;
 
   final RegExp detectionRegExp;
 
@@ -1283,8 +1306,10 @@ class _DetectableTextFieldState extends State<DetectableTextField>
           detectionRegExp: widget.detectionRegExp,
           detectedStyle:
               widget.decoratedStyle ?? style.copyWith(color: Colors.blue),
+          detectedStyleCallback: widget.detectedStyleCallback,
           onDetectionFinished: widget.onDetectionFinished,
-          onDetectionTyped: widget.onDetectionTyped,
+          onDetectableTypedText: widget.onDetectableTypedText,
+          onDetectableTyped: widget.onDetectableTyped,
           readOnly: widget.readOnly || !_isEnabled,
           toolbarOptions: widget.toolbarOptions,
           showCursor: widget.showCursor,
