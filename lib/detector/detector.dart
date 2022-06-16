@@ -18,7 +18,7 @@ class Detection extends Comparable<Detection> {
 ///
 /// Return the list of [Detection] in [getDetections]
 class Detector {
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
   final TextStyle? detectedStyle;
   final RegExp detectionRegExp;
 
