@@ -25,7 +25,7 @@ List<String> extractDetections(String value, RegExp detectionRegExp) {
 ///
 /// Used in [DetectableText]
 TextSpan getDetectedTextSpan({
-  required TextStyle decoratedStyle,
+  // required TextStyle decoratedStyle,
   required TextStyle? Function(String) detectedStyleCallback,
   required TextStyle basicStyle,
   required String source,
@@ -70,7 +70,8 @@ TextSpan getDetectedTextSpan({
 }
 
 TextSpan getDetectedTextSpanWithExtraChild(
-    {required TextStyle decoratedStyle,
+    {
+      // required TextStyle decoratedStyle,
     required TextStyle? Function(String) detectedStyleCallback,
     required TextStyle basicStyle,
     required String source,

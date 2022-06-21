@@ -19,7 +19,6 @@ class DetectableText extends StatefulWidget {
     required this.text,
     required this.detectionRegExp,
     this.basicStyle,
-    this.detectedStyle,
     required this.detectedStyleCallback,
     this.onTap,
     this.alwaysDetectTap = false,
@@ -47,7 +46,6 @@ class DetectableText extends StatefulWidget {
 
   final String text;
   final TextStyle? basicStyle;
-  final TextStyle? detectedStyle;
   final Function(String)? onTap;
   final bool alwaysDetectTap;
   final TextAlign textAlign;
@@ -67,10 +65,7 @@ class DetectableText extends StatefulWidget {
   final int trimLength;
 
   /// A callback function that returns a [TextStyle] for detected text, passing
-  /// in the [DetectableText.text]. The [TextStyle] returned by the
-  /// [detectedStyleCallback] has the highest priority in styling detected
-  /// text, followed by [detectedStyle] and then [basicStyle] or the current
-  /// theme's [TextTheme.subtitle1] with blue color.
+  /// in the [DetectableText.text].
   final TextStyleCallBack detectedStyleCallback;
 
   /// Used on TrimMode.Lines
@@ -112,7 +107,6 @@ class _DetectableTextState extends State<DetectableText> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final TextStyle style = theme.textTheme.subtitle1!.merge(widget.basicStyle);
-    final dStyle = widget.detectedStyle ?? style.copyWith(color: Colors.blue);
     final _defaultLessStyle = widget.lessStyle ?? style;
     final _defaultMoreStyle = widget.moreStyle ?? style;
     final textDirection = widget.textDirection ?? Directionality.of(context);
@@ -143,7 +137,7 @@ class _DetectableTextState extends State<DetectableText> {
 
         // Create a TextSpan with data
         final text = getDetectedTextSpan(
-          decoratedStyle: dStyle,
+          // decoratedStyle: dStyle,
           detectedStyleCallback: widget.detectedStyleCallback,
           basicStyle: style,
           onTap: widget.onTap,
@@ -208,7 +202,7 @@ class _DetectableTextState extends State<DetectableText> {
               // );
 
               textSpan = getDetectedTextSpanWithExtraChild(
-                decoratedStyle: dStyle,
+                // decoratedStyle: dStyle,
                 detectedStyleCallback: widget.detectedStyleCallback,
                 basicStyle: style,
                 onTap: widget.onTap,
@@ -221,7 +215,7 @@ class _DetectableTextState extends State<DetectableText> {
               );
             } else {
               textSpan = getDetectedTextSpan(
-                decoratedStyle: dStyle,
+                // decoratedStyle: dStyle,
                 detectedStyleCallback: widget.detectedStyleCallback,
                 basicStyle: style,
                 onTap: widget.onTap,
@@ -242,7 +236,7 @@ class _DetectableTextState extends State<DetectableText> {
               // );
 
               textSpan = getDetectedTextSpanWithExtraChild(
-                decoratedStyle: dStyle,
+                // decoratedStyle: dStyle,
                 detectedStyleCallback: widget.detectedStyleCallback,
                 basicStyle: style,
                 onTap: widget.onTap,
@@ -255,7 +249,7 @@ class _DetectableTextState extends State<DetectableText> {
               );
             } else {
               textSpan = getDetectedTextSpan(
-                decoratedStyle: dStyle,
+                // decoratedStyle: dStyle,
                 detectedStyleCallback: widget.detectedStyleCallback,
                 basicStyle: style,
                 onTap: widget.onTap,

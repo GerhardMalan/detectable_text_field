@@ -332,7 +332,7 @@ class DetectableTextField extends StatefulWidget {
   const DetectableTextField({
     Key? key,
     required this.detectionRegExp,
-    this.decoratedStyle,
+    // this.decoratedStyle,
     required this.detectedStyleCallback,
     this.onDetectionFinished,
     this.onDetectableTypedText,
@@ -442,19 +442,6 @@ class DetectableTextField extends StatefulWidget {
   final ValueChanged<Detection>? onDetectableTyped;
 
   final VoidCallback? onDetectionFinished;
-
-  /// TextStyle of detected text.
-  ///
-  /// Will be used if [detectedStyleCallback] is null. If both [decoratedStyle]
-  /// and [detectedStyleCallback] are null, defaults to current theme's
-  /// [TextTheme.subtitle1] merged with [basicStyle] and blue color.
-  /// ```dart
-  /// Theme.of(context).textTheme
-  ///     .subtitle1!
-  ///     .merge(widget.basicStyle)
-  ///     .copyWith(color: Colors.blue);
-  /// ```
-  final TextStyle? decoratedStyle;
 
   /// A callback function that returns a [TextStyle] for detected text, passing
   /// in the [DetectableText.text]. The [TextStyle] returned by the
@@ -1306,8 +1293,6 @@ class _DetectableTextFieldState extends State<DetectableTextField>
         child: DetectableEditableText(
           key: editableTextKey,
           detectionRegExp: widget.detectionRegExp,
-          detectedStyle:
-              widget.decoratedStyle ?? style.copyWith(color: Colors.blue),
           detectedStyleCallback: widget.detectedStyleCallback,
           onDetectionFinished: widget.onDetectionFinished,
           onDetectableTypedText: widget.onDetectableTypedText,
@@ -1443,13 +1428,6 @@ class _DetectableTextFieldState extends State<DetectableTextField>
         ),
       ),
     );
-
-    // if (kIsWeb) {
-    //   return Shortcuts(
-    //     shortcuts: scrollShortcutOverrides,
-    //     child: child,
-    //   );
-    // }
     return child;
   }
 }

@@ -1,12 +1,8 @@
 import 'dart:ui';
-
-import 'package:detectable_text_field/composer/composer.dart';
 import 'package:detectable_text_field/detectable_text_field.dart';
-import 'package:detectable_text_field/detector/detector.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
-// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// Show detected text while user is inputting text.
@@ -18,7 +14,6 @@ class DetectableEditableText extends EditableText {
     FocusNode? focusNode,
     required TextEditingController controller,
     required this.basicStyle,
-    required this.detectedStyle,
     required this.detectedStyleCallback,
     required this.detectionRegExp,
     required Color cursorColor,
@@ -142,24 +137,8 @@ class DetectableEditableText extends EditableText {
           cursorHeight: cursorHeight,
         );
 
-  /// TextStyle of detected text.
-  ///
-  /// Will be used if [detectedStyleCallback] is null. If both [detectedStyle]
-  /// and [detectedStyleCallback] are null, defaults to current theme's
-  /// [TextTheme.subtitle1] merged with [basicStyle] and blue color.
-  /// ```dart
-  /// Theme.of(context).textTheme
-  ///     .subtitle1!
-  ///     .merge(widget.basicStyle)
-  ///     .copyWith(color: Colors.blue);
-  /// ```
-  final TextStyle detectedStyle;
-
-  /// TextStyle of detected text.
-  ///
-  /// Will be used if [detectedStyleCallback] is null. If both [detectedStyle]
-  /// and [detectedStyleCallback] are null, defaults to current theme's
-  /// [TextTheme.subtitle1] merged with [basicStyle] and blue color.
+  /// Defaults to current theme's [TextTheme.subtitle1] merged with
+  /// [basicStyle] and blue color.
   /// ```dart
   /// Theme.of(context).textTheme
   ///     .subtitle1!
@@ -169,10 +148,7 @@ class DetectableEditableText extends EditableText {
   final TextStyle basicStyle;
 
   /// A callback function that returns a [TextStyle] for detected text, passing
-  /// in the [DetectableText.text]. The [TextStyle] returned by the
-  /// [detectedStyleCallback] has the highest priority in styling detected
-  /// text, followed by [detectedStyle] and then [basicStyle] or the current
-  /// theme's [TextTheme.subtitle1] with blue color.
+  /// in the [DetectableText.text].
   final TextStyleCallBack detectedStyleCallback;
 
   final RegExp detectionRegExp;
@@ -215,7 +191,6 @@ class DetectableEditableTextState extends EditableTextState {
       onDetectableTyped: widget.onDetectableTyped,
       onDetectableTypedText: widget.onDetectableTypedText,
       sourceText: textEditingValue.text,
-      // detectedStyle: widget.detectedStyle,
       detectedStyleCallback: widget.detectedStyleCallback,
       detections: detections,
       composing: textEditingValue.composing,
@@ -242,7 +217,6 @@ class DetectableEditableTextState extends EditableTextState {
       onDetectableTyped: widget.onDetectableTyped,
       onDetectableTypedText: widget.onDetectableTypedText,
       sourceText: textEditingValue.text,
-      // detectedStyle: widget.detectedStyle,
       detectedStyleCallback: widget.detectedStyleCallback,
       detections: detections,
       composing: textEditingValue.composing,

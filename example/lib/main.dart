@@ -70,12 +70,12 @@ class MyHomePage extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                   color: Colors.grey,
                 ),
-                detectedStyle: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 0.5,
-                  color: Colors.blueAccent,
-                ),
+                // detectedStyle: TextStyle(
+                //   fontSize: 16,
+                //   fontWeight: FontWeight.w500,
+                //   letterSpacing: 0.5,
+                //   color: Colors.blueAccent,
+                // ),
               ),
               const SizedBox(height: 32),
               DetectableTextField(
