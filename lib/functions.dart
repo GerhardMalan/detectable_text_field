@@ -5,36 +5,16 @@ import 'detector/detector.dart';
 
 /// Check if the text has detection
 bool isDetected(String value, RegExp detectionRegExp) {
-  final decoratedTextColor = Colors.blue;
-  final detector = Detector(
-    textStyle: TextStyle(),
-    detectedStyleCallback: null,
-    detectedStyle: TextStyle(
-      color: decoratedTextColor,
-    ),
-    detectionRegExp: detectionRegExp,
-  );
+  final detector = Detector(detectionRegExp: detectionRegExp);
   final result = detector.getDetections(value);
-  final detections = result
-      .where((detection) => detection.style!.color == decoratedTextColor)
-      .toList();
-  return detections.isNotEmpty;
+  return result.isNotEmpty;
 }
 
 /// Extract detections from the text
 List<String> extractDetections(String value, RegExp detectionRegExp) {
-  final decoratedTextColor = Colors.blue;
-  final decorator = Detector(
-    textStyle: TextStyle(),
-    detectedStyleCallback: null,
-    detectedStyle: TextStyle(color: decoratedTextColor),
-    detectionRegExp: detectionRegExp,
-  );
+  final decorator = Detector(detectionRegExp: detectionRegExp);
   final decorations = decorator.getDetections(value);
-  final taggedDecorations = decorations
-      .where((decoration) => decoration.style!.color == decoratedTextColor)
-      .toList();
-  final result = taggedDecorations.map((decoration) {
+  final result = decorations.map((decoration) {
     final text = decoration.range.textInside(value);
     return text.trim();
   }).toList();
@@ -46,7 +26,7 @@ List<String> extractDetections(String value, RegExp detectionRegExp) {
 /// Used in [DetectableText]
 TextSpan getDetectedTextSpan({
   required TextStyle decoratedStyle,
-  required TextStyle Function(String)? detectedStyleCallback,
+  required TextStyle? Function(String) detectedStyleCallback,
   required TextStyle basicStyle,
   required String source,
   required RegExp detectionRegExp,
@@ -54,12 +34,8 @@ TextSpan getDetectedTextSpan({
   Function(String)? onTap,
   bool decorateAtSign = false,
 }) {
-  final detections = Detector(
-    detectedStyle: decoratedStyle,
-    detectedStyleCallback: detectedStyleCallback,
-    textStyle: basicStyle,
-    detectionRegExp: detectionRegExp,
-  ).getDetections(source);
+  final detections =
+      Detector(detectionRegExp: detectionRegExp).getDetections(source);
   if (detections.isEmpty) {
     return TextSpan(text: source, style: basicStyle);
   } else {
@@ -68,18 +44,19 @@ TextSpan getDetectedTextSpan({
         .asMap()
         .map(
           (index, item) {
+            final text = item.range.textInside(source);
+            final style = detectedStyleCallback(text) ?? basicStyle;
             final recognizer = TapGestureRecognizer()
               ..onTap = () {
-                final decoration = detections[index];
-                if (decoration.style == decoratedStyle || alwaysDetectTap) {
-                  onTap!(decoration.range.textInside(source).trim());
+                if (style != basicStyle || alwaysDetectTap) {
+                  onTap!(text.trim());
                 }
               };
             return MapEntry(
               index,
               TextSpan(
-                style: item.style,
-                text: item.range.textInside(source),
+                style: style,
+                text: text,
                 recognizer: (onTap == null) ? null : recognizer,
               ),
             );
@@ -94,19 +71,15 @@ TextSpan getDetectedTextSpan({
 
 TextSpan getDetectedTextSpanWithExtraChild(
     {required TextStyle decoratedStyle,
-    required TextStyle Function(String)? detectedStyleCallback,
+    required TextStyle? Function(String) detectedStyleCallback,
     required TextStyle basicStyle,
     required String source,
     required RegExp detectionRegExp,
     Function(String)? onTap,
     bool decorateAtSign = false,
     List<InlineSpan>? children}) {
-  final detections = Detector(
-    detectedStyle: decoratedStyle,
-    detectedStyleCallback: detectedStyleCallback,
-    textStyle: basicStyle,
-    detectionRegExp: detectionRegExp,
-  ).getDetections(source);
+  final detections =
+      Detector(detectionRegExp: detectionRegExp).getDetections(source);
   if (detections.isEmpty) {
     // return TextSpan(text: source, style: basicStyle);
     return TextSpan(
@@ -120,18 +93,19 @@ TextSpan getDetectedTextSpanWithExtraChild(
         .asMap()
         .map(
           (index, item) {
+            final text = item.range.textInside(source);
+            final style = detectedStyleCallback(text) ?? basicStyle;
             final recognizer = TapGestureRecognizer()
               ..onTap = () {
-                final decoration = detections[index];
-                if (decoration.style == decoratedStyle) {
-                  onTap!(decoration.range.textInside(source).trim());
+                if (style != basicStyle) {
+                  onTap!(text.trim());
                 }
               };
             return MapEntry(
               index,
               TextSpan(
-                style: item.style,
-                text: item.range.textInside(source),
+                style: style,
+                text: text,
                 recognizer: (onTap == null) ? null : recognizer,
               ),
             );

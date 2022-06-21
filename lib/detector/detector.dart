@@ -2,10 +2,9 @@ import 'package:flutter/cupertino.dart';
 
 /// DataModel to explain the unit of word in decoration system
 class Detection extends Comparable<Detection> {
-  Detection({required this.range, this.style, this.emojiStartPoint});
+  Detection({required this.range, this.emojiStartPoint});
 
   final TextRange range;
-  final TextStyle? style;
   final int? emojiStartPoint;
 
   @override
@@ -18,23 +17,11 @@ class Detection extends Comparable<Detection> {
 ///
 /// Return the list of [Detection] in [getDetections]
 class Detector {
-  final TextStyle? textStyle;
-  final TextStyle? detectedStyle;
+  //
+
   final RegExp detectionRegExp;
 
-  /// A callback function that returns a [TextStyle] for detected text, passing
-  /// in the [DetectableText.text]. The [TextStyle] returned by the
-  /// [detectedStyleCallback] has the highest priority in styling detected
-  /// text, followed by [decoratedStyle] and then [basicStyle] or the current
-  /// theme's [TextTheme.subtitle1] with blue color.
-  final TextStyle Function(String)? detectedStyleCallback;
-
-  Detector({
-    required this.detectedStyleCallback,
-    required this.textStyle,
-    required this.detectedStyle,
-    required this.detectionRegExp,
-  });
+  Detector({required this.detectionRegExp});
 
   List<Detection> _getSourceDetections(
       List<RegExpMatch> tags, String copiedText) {
@@ -44,23 +31,17 @@ class Detector {
       ///Add undetected content
       if (previousItem == null) {
         if (tag.start > 0) {
-          result.add(Detection(
-              range: TextRange(start: 0, end: tag.start), style: textStyle));
+          result.add(Detection(range: TextRange(start: 0, end: tag.start)));
         }
       } else {
         result.add(Detection(
-            range: TextRange(start: previousItem.end, end: tag.start),
-            style: textStyle));
+            range: TextRange(start: previousItem.end, end: tag.start)));
       }
 
       ///Add detected content
       final text =
           TextRange(start: tag.start, end: tag.end).textInside(copiedText);
-      final style = detectedStyleCallback == null
-          ? detectedStyle
-          : detectedStyleCallback!(text);
-      result.add(Detection(
-          range: TextRange(start: tag.start, end: tag.end), style: style));
+      result.add(Detection(range: TextRange(start: tag.start, end: tag.end)));
       previousItem = TextRange(start: tag.start, end: tag.end);
     }
 
@@ -68,8 +49,7 @@ class Detector {
     if (result.last.range.end < copiedText.length) {
       result.add(Detection(
           range:
-              TextRange(start: result.last.range.end, end: copiedText.length),
-          style: textStyle));
+              TextRange(start: result.last.range.end, end: copiedText.length)));
     }
     return result;
   }
@@ -94,14 +74,11 @@ class Detector {
               : emojiMatch.start;
         }
       }
-      if (item.style == detectedStyle && emojiStartPoint != null) {
+      if (emojiStartPoint != null) {
         result.add(Detection(
-          range: TextRange(start: item.range.start, end: emojiStartPoint),
-          style: detectedStyle,
-        ));
+            range: TextRange(start: item.range.start, end: emojiStartPoint)));
         result.add(Detection(
-            range: TextRange(start: emojiStartPoint, end: item.range.end),
-            style: textStyle));
+            range: TextRange(start: emojiStartPoint, end: item.range.end)));
       } else {
         result.add(item);
       }

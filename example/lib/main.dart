@@ -41,6 +41,7 @@ class MyHomePage extends StatelessWidget {
             children: <Widget>[
               DetectableText(
                 trimLines: 1,
+                detectedStyleCallback: _callback,
                 colorClickableText: Colors.pink,
                 trimMode: TrimMode.Line,
                 trimCollapsedText: 'more',
@@ -78,6 +79,7 @@ class MyHomePage extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               DetectableTextField(
+                detectedStyleCallback: _callback,
                 maxLines: null,
                 detectionRegExp: detectionRegExp()!,
                 onDetectableTypedText: (text) {
@@ -92,6 +94,15 @@ class MyHomePage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  TextStyle? _callback(String p1) {
+    return TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.5,
+      color: Colors.blueAccent,
     );
   }
 }

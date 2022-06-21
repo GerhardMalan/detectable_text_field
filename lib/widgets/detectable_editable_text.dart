@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:detectable_text_field/composer/composer.dart';
+import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:detectable_text_field/detector/detector.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -16,7 +17,7 @@ class DetectableEditableText extends EditableText {
     Key? key,
     FocusNode? focusNode,
     required TextEditingController controller,
-    required TextStyle basicStyle,
+    required this.basicStyle,
     required this.detectedStyle,
     required this.detectedStyleCallback,
     required this.detectionRegExp,
@@ -154,12 +155,25 @@ class DetectableEditableText extends EditableText {
   /// ```
   final TextStyle detectedStyle;
 
+  /// TextStyle of detected text.
+  ///
+  /// Will be used if [detectedStyleCallback] is null. If both [detectedStyle]
+  /// and [detectedStyleCallback] are null, defaults to current theme's
+  /// [TextTheme.subtitle1] merged with [basicStyle] and blue color.
+  /// ```dart
+  /// Theme.of(context).textTheme
+  ///     .subtitle1!
+  ///     .merge(widget.basicStyle)
+  ///     .copyWith(color: Colors.blue);
+  /// ```
+  final TextStyle basicStyle;
+
   /// A callback function that returns a [TextStyle] for detected text, passing
   /// in the [DetectableText.text]. The [TextStyle] returned by the
   /// [detectedStyleCallback] has the highest priority in styling detected
   /// text, followed by [detectedStyle] and then [basicStyle] or the current
   /// theme's [TextTheme.subtitle1] with blue color.
-  final TextStyle Function(String)? detectedStyleCallback;
+  final TextStyleCallBack detectedStyleCallback;
 
   final RegExp detectionRegExp;
 
@@ -187,12 +201,7 @@ class DetectableEditableTextState extends EditableTextState {
   @override
   void initState() {
     super.initState();
-    detector = Detector(
-      textStyle: widget.style,
-      detectedStyle: widget.detectedStyle,
-      detectedStyleCallback: widget.detectedStyleCallback,
-      detectionRegExp: widget.detectionRegExp,
-    );
+    detector = Detector(detectionRegExp: widget.detectionRegExp);
     widget.controller.addListener(() {
       _onValueUpdated.call();
     });
@@ -201,13 +210,13 @@ class DetectableEditableTextState extends EditableTextState {
   void _onValueUpdated() {
     final detections = detector.getDetections(textEditingValue.text);
     final composer = Composer(
+      basicStyle: widget.basicStyle,
       selection: textEditingValue.selection.start,
       onDetectableTyped: widget.onDetectableTyped,
       onDetectableTypedText: widget.onDetectableTypedText,
       sourceText: textEditingValue.text,
       // detectedStyle: widget.detectedStyle,
-      detectedStyleCallback:
-          widget.detectedStyleCallback ?? (e) => widget.detectedStyle,
+      detectedStyleCallback: widget.detectedStyleCallback,
       detections: detections,
       composing: textEditingValue.composing,
     );
@@ -228,13 +237,13 @@ class DetectableEditableTextState extends EditableTextState {
   TextSpan buildTextSpan() {
     final detections = detector.getDetections(textEditingValue.text);
     final composer = Composer(
+      basicStyle: widget.basicStyle,
       selection: textEditingValue.selection.start,
       onDetectableTyped: widget.onDetectableTyped,
       onDetectableTypedText: widget.onDetectableTypedText,
       sourceText: textEditingValue.text,
       // detectedStyle: widget.detectedStyle,
-      detectedStyleCallback:
-          widget.detectedStyleCallback ?? (e) => widget.detectedStyle,
+      detectedStyleCallback: widget.detectedStyleCallback,
       detections: detections,
       composing: textEditingValue.composing,
     );

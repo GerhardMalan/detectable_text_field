@@ -1,3 +1,4 @@
+import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:detectable_text_field/detector/detector.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ class Composer {
       required this.detections,
       required this.composing,
       required this.selection,
-      // required this.detectedStyle,
+      required this.basicStyle,
       required this.detectedStyleCallback,
       required this.onDetectableTypedText,
       required this.onDetectableTyped});
@@ -19,14 +20,14 @@ class Composer {
   final List<Detection?> detections;
   final TextRange composing;
   final int selection;
-  // TextStyle? detectedStyle;
+  final TextStyle basicStyle;
 
   /// A callback function that returns a [TextStyle] for detected text, passing
   /// in the [DetectableText.text]. The [TextStyle] returned by the
   /// [detectedStyleCallback] has the highest priority in styling detected
   /// text, followed by [detectedStyle] and then [basicStyle] or the current
   /// theme's [TextTheme.subtitle1] with blue color.
-  final TextStyle Function(String) detectedStyleCallback;
+  final TextStyleCallBack detectedStyleCallback;
 
   final ValueChanged<String>? onDetectableTypedText;
 
@@ -38,7 +39,8 @@ class Composer {
     final span = detections.map(
       (item) {
         final spanRange = item!.range;
-        final spanStyle = item.style!;
+        final text = spanRange.textInside(sourceText);
+        final spanStyle = detectedStyleCallback(text) ?? basicStyle;
         final underlinedStyle =
             spanStyle.copyWith(decoration: TextDecoration.underline);
         if (spanRange.start <= composing.start &&
@@ -98,11 +100,8 @@ class Composer {
 
   Detection? typingDetection() {
     final res = detections.where((detection) {
-      final style =
-          detectedStyleCallback(detection!.range.textInside(sourceText));
-      return detection.style == style &&
-          detection.range.start <= selection &&
-          detection.range.end >= selection;
+      final typingRange = detection!.range;
+      return typingRange.start <= selection && typingRange.end >= selection;
     });
     if (res.isNotEmpty) {
       return res.first;

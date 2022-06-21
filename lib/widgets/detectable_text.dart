@@ -1,3 +1,4 @@
+import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../functions.dart';
@@ -19,7 +20,7 @@ class DetectableText extends StatefulWidget {
     required this.detectionRegExp,
     this.basicStyle,
     this.detectedStyle,
-    this.detectedStyleCallback,
+    required this.detectedStyleCallback,
     this.onTap,
     this.alwaysDetectTap = false,
     this.textAlign = TextAlign.start,
@@ -70,7 +71,7 @@ class DetectableText extends StatefulWidget {
   /// [detectedStyleCallback] has the highest priority in styling detected
   /// text, followed by [detectedStyle] and then [basicStyle] or the current
   /// theme's [TextTheme.subtitle1] with blue color.
-  final TextStyle Function(String)? detectedStyleCallback;
+  final TextStyleCallBack detectedStyleCallback;
 
   /// Used on TrimMode.Lines
   final int trimLines;

@@ -23,6 +23,8 @@ export 'package:flutter/services.dart'
         SmartQuotesType,
         SmartDashesType;
 
+typedef TextStyleCallBack = TextStyle? Function(String);
+
 /// Signature for the [DetectableTextField.buildCounter] callback.
 typedef InputCounterWidgetBuilder = Widget? Function(
   /// The build context for the TextField.
@@ -331,7 +333,7 @@ class DetectableTextField extends StatefulWidget {
     Key? key,
     required this.detectionRegExp,
     this.decoratedStyle,
-    this.detectedStyleCallback,
+    required this.detectedStyleCallback,
     this.onDetectionFinished,
     this.onDetectableTypedText,
     this.onDetectableTyped,
@@ -459,7 +461,7 @@ class DetectableTextField extends StatefulWidget {
   /// [detectedStyleCallback] has the highest priority in styling detected
   /// text, followed by [decoratedStyle] and then [basicStyle] or the current
   /// theme's [TextTheme.subtitle1] with blue color.
-  final TextStyle Function(String)? detectedStyleCallback;
+  final TextStyleCallBack detectedStyleCallback;
 
   final RegExp detectionRegExp;
 
