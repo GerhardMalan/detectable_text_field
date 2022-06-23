@@ -50,8 +50,8 @@ class Detector {
       }
 
       ///Add detected content
-      final text =
-          TextRange(start: tag.start, end: tag.end).textInside(copiedText);
+      // final text =
+      //     TextRange(start: tag.start, end: tag.end).textInside(copiedText);
       result.add(Detection(range: TextRange(start: tag.start, end: tag.end)));
       previousItem = TextRange(start: tag.start, end: tag.end);
     }
