@@ -4,6 +4,17 @@ import 'package:flutter/cupertino.dart';
 class Detection extends Comparable<Detection> {
   Detection({required this.range, this.emojiStartPoint});
 
+  static Detection empty() => Detection(range: TextRange(start: -1, end: -1));
+
+  bool get isEmpty => range.start == -1 && range.end == -1;
+
+  bool get isNotEmpty => !isEmpty;
+
+  String getText(String source) =>
+      (range.start < 0 || range.end > source.length)
+          ? ''
+          : range.textInside(source);
+
   final TextRange range;
   final int? emojiStartPoint;
 
@@ -122,5 +133,21 @@ class Detector {
         source: sourceDetections);
 
     return emojiFilteredResult;
+  }
+}
+
+extension DetectorListExtensions on Iterable<Detection> {
+//
+
+  /// Returns the first detection in the Iterable where the
+  /// [selection.start] is greater than or equal to [Detection.range.start]
+  /// and less than or equal to [Detection.range.end].
+  Detection? getTypedDetection(int cursor) {
+    // final cursor = selection.start;
+    final detection = firstWhere(
+        (element) =>
+            element.range.start <= cursor && element.range.end >= cursor,
+        orElse: Detection.empty);
+    return detection.isEmpty ? null : detection;
   }
 }
