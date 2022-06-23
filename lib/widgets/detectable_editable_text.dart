@@ -151,7 +151,7 @@ class DetectableEditableText extends EditableText {
   /// in the [DetectableText.text].
   final TextStyleCallBack detectedStyleCallback;
 
-  final RegExp detectionRegExp;
+  final RegExp Function() detectionRegExp;
 
   final ValueChanged<String>? onDetectableTypedText;
 
@@ -170,21 +170,22 @@ class DetectableEditableTextState extends EditableTextState {
   @override
   DetectableEditableText get widget => super.widget as DetectableEditableText;
 
-  late Detector detector;
+  // late Detector detector;
 
   Detection? prevTypingDetection;
 
   @override
   void initState() {
     super.initState();
-    detector = Detector(detectionRegExp: widget.detectionRegExp);
+    // detector = Detector(detectionRegExp: widget.detectionRegExp());
     widget.controller.addListener(() {
       _onValueUpdated.call();
     });
   }
 
   void _onValueUpdated() {
-    final detections = detector.getDetections(textEditingValue.text);
+    final detections = Detector(detectionRegExp: widget.detectionRegExp())
+        .getDetections(textEditingValue.text);
     final composer = Composer(
       basicStyle: widget.basicStyle,
       selection: textEditingValue.selection.start,
@@ -210,7 +211,8 @@ class DetectableEditableTextState extends EditableTextState {
 
   @override
   TextSpan buildTextSpan() {
-    final detections = detector.getDetections(textEditingValue.text);
+    final detections = Detector(detectionRegExp: widget.detectionRegExp())
+        .getDetections(textEditingValue.text);
     final composer = Composer(
       basicStyle: widget.basicStyle,
       selection: textEditingValue.selection.start,

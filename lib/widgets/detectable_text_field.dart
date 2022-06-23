@@ -450,7 +450,7 @@ class DetectableTextField extends StatefulWidget {
   /// theme's [TextTheme.subtitle1] with blue color.
   final TextStyleCallBack detectedStyleCallback;
 
-  final RegExp detectionRegExp;
+  final RegExp Function() detectionRegExp;
 
   /// Controls the text being edited.
   ///

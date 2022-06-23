@@ -81,7 +81,7 @@ class MyHomePage extends StatelessWidget {
               DetectableTextField(
                 detectedStyleCallback: _callback,
                 maxLines: null,
-                detectionRegExp: detectionRegExp()!,
+                detectionRegExp: () => detectionRegExp()!,
                 onDetectableTypedText: (text) {
                   print(text);
                 },
