@@ -23,7 +23,7 @@ void main() {
     },
   );
   test(
-    "url detection test with hashtags",
+    "url detection test with hashTags",
     () {
       final regex = RegExp(
         '(?!\\n)(?:^|\\s)([#@]([$detectionContentLetters]+))|$_urlRegex',
@@ -39,8 +39,8 @@ void main() {
     "detectionRegExp must return proper regExp",
     () {
       expect(detectionRegExp(), hashTagAtSignUrlRegExp);
-      expect(detectionRegExp(hashtag: false), atSignUrlRegExp);
-      expect(detectionRegExp(hashtag: false, atSign: false), urlRegex);
+      expect(detectionRegExp(hashTag: false), atSignUrlRegExp);
+      expect(detectionRegExp(hashTag: false, atSign: false), urlRegex);
       expect(detectionRegExp(atSign: false), hashTagUrlRegExp);
       expect(detectionRegExp(atSign: false, url: false), hashTagRegExp);
       expect(detectionRegExp(url: false), hashTagAtSignRegExp);

@@ -2,9 +2,9 @@
 
 [![pub package](https://img.shields.io/pub/v/detectable_text_field.svg)](https://pub.dev/packages/detectable_text_field) <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
 
-Text widgets with detection features. You can detect hashtags, at sign, url, or anything you want. Helps you develop Twitter like app.
+Text widgets with detection features. You can detect hashTags, at sign, url, or anything you want. Helps you develop Twitter like app.
 
-Refinement of [hashtagable](https://pub.dev/packages/hashtagable).
+Refinement of [hashTagable](https://pub.dev/packages/hashTagable).
 
 ![final](https://user-images.githubusercontent.com/43510799/104180838-2385fd80-5451-11eb-8506-1640b4ea829f.gif)
 
@@ -59,13 +59,13 @@ You can add some actions in this callback with the tapped text.
 
 The widgets and methods in this package is expected to be used with RegExp.
 
-The function `detectionRegExp()` returns sample regExp depending om the boolean arguments: `hashtag`, `atSign`, and `url`.They are all `true` by default.
+The function `detectionRegExp()` returns sample regExp depending om the boolean arguments: `hashTag`, `atSign`, and `url`.They are all `true` by default.
 
 If you do **NOT** want to detect atSign, you need to set the argument like this: `detectionRegExp(atSign:false)`. It is same for other arguments.
 
 If you see the [API reference](https://pub.dev/documentation/detectable_text_field/latest/detector_sample_regular_expressions/detectionRegExp.html), you will see the function just returns the sample regular expressions below. You can use them directly if you want.
 
-| sample regExp | hashtag | atSign | url |
+| sample regExp | hashTag | atSign | url |
 | --- | --- | --- | ---- |
 | `hashTagRegExp` |○|×|×|
 | `atSignRegExp`|×|○|×|

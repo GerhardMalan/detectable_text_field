@@ -1,7 +1,7 @@
 import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:flutter/material.dart';
 
-/// Add composing to hashtag decorated text.
+/// Add composing to hashTag decorated text.
 ///
 /// Expected to be used when Japanese letters are typed.
 class Composer {

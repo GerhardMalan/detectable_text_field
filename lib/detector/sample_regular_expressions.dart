@@ -33,7 +33,7 @@ const urlRegexContent = "((http|https)://)(www.)?" +
     "{2,6}\\b([-a-zA-Z0-9@:%" +
     "._\\+~#?&//=]*)";
 
-/// Regular expression to extract hashtag
+/// Regular expression to extract hashTag
 ///
 /// Supports English, Japanese, Korean, Spanish, Arabic, and Thai
 final hashTagRegExp = RegExp(
@@ -81,14 +81,14 @@ final wordsRegExp = RegExp(r"'?([a-zA-Z0-9-¥Œ€@™#-\&_'-]{2,})'?");
 // );
 
 RegExp? detectionRegExp({
-  bool hashtag = true,
+  bool hashTag = true,
   bool atSign = true,
   bool url = true,
 }) {
-  if (hashtag == true && atSign == true && url == true) {
+  if (hashTag == true && atSign == true && url == true) {
     return hashTagAtSignUrlRegExp;
   }
-  if (hashtag == true) {
+  if (hashTag == true) {
     if (atSign == true) {
       return hashTagAtSignRegExp;
     }
@@ -109,6 +109,6 @@ RegExp? detectionRegExp({
     return urlRegex;
   }
   assert(false,
-      "Unexpected condition: hashtag:$hashtag, atSign:$atSign, url:$url");
+      "Unexpected condition: hashTag:$hashTag, atSign:$atSign, url:$url");
   return null;
 }
