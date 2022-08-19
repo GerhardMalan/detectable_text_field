@@ -110,6 +110,8 @@ class _TextFieldSelectionGestureDetectorBuilder
               break;
             // case PointerDeviceKind.trackpad:
             //   break;
+            case PointerDeviceKind.trackpad:
+              break;
           }
           break;
         case TargetPlatform.android:
