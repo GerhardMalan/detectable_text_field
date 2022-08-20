@@ -3,17 +3,13 @@
 // found in the LICENSE file.
 
 import 'dart:ui' as ui show BoxHeightStyle, BoxWidthStyle;
-
 import 'package:detectable_text_field/detectable_text_field.dart';
-// import 'package:detectable_text_field/detector/detector.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-
-// import 'detectable_editable_text.dart';
 
 export 'package:flutter/services.dart'
     show
@@ -44,11 +40,11 @@ typedef InputCounterWidgetBuilder = Widget? Function(
 class _TextFieldSelectionGestureDetectorBuilder
     extends TextSelectionGestureDetectorBuilder {
   _TextFieldSelectionGestureDetectorBuilder({
-    required _DetectableTextFieldState state,
+    required DetectableTextFieldState state,
   })  : _state = state,
         super(delegate: state);
 
-  final _DetectableTextFieldState _state;
+  final DetectableTextFieldState _state;
 
   @override
   void onForcePressStart(ForcePressDetails details) {
@@ -826,7 +822,7 @@ class DetectableTextField extends StatefulWidget {
   final String? restorationId;
 
   @override
-  _DetectableTextFieldState createState() => _DetectableTextFieldState();
+  DetectableTextFieldState createState() => DetectableTextFieldState();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -922,7 +918,7 @@ class DetectableTextField extends StatefulWidget {
   }
 }
 
-class _DetectableTextFieldState extends State<DetectableTextField>
+class DetectableTextFieldState extends State<DetectableTextField>
     with RestorationMixin
     implements TextSelectionGestureDetectorBuilderDelegate {
   RestorableTextEditingController? _controller;
@@ -1017,8 +1013,9 @@ class _DetectableTextFieldState extends State<DetectableTextField>
       return effectiveDecoration.copyWith(counter: counter);
     }
 
-    if (widget.maxLength == null)
-      return effectiveDecoration; // No counter widget
+    if (widget.maxLength == null) {
+      return effectiveDecoration;
+    } // No counter widget
 
     String counterText = '$currentLength';
     String semanticCounterText = '';
@@ -1138,13 +1135,15 @@ class _DetectableTextFieldState extends State<DetectableTextField>
   bool _shouldShowSelectionHandles(SelectionChangedCause? cause) {
     // When the text field is activated by something that doesn't trigger the
     // selection overlay, we shouldn't show the handles either.
-    if (!_selectionGestureDetectorBuilder.shouldShowSelectionToolbar)
+    if (!_selectionGestureDetectorBuilder.shouldShowSelectionToolbar) {
       return false;
+    }
 
     if (cause == SelectionChangedCause.keyboard) return false;
 
-    if (widget.readOnly && _effectiveController.selection.isCollapsed)
+    if (widget.readOnly && _effectiveController.selection.isCollapsed) {
       return false;
+    }
 
     if (!_isEnabled) return false;
 
@@ -1414,10 +1413,11 @@ class _DetectableTextFieldState extends State<DetectableTextField>
               onTap: widget.readOnly
                   ? null
                   : () {
-                      if (!_effectiveController.selection.isValid)
+                      if (!_effectiveController.selection.isValid) {
                         _effectiveController.selection =
                             TextSelection.collapsed(
                                 offset: _effectiveController.text.length);
+                      }
                       _requestKeyboard();
                     },
               child: child,

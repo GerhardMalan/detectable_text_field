@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import '../functions.dart';
 
 enum TrimMode {
-  Length,
-  Line,
+  length,
+  line,
 }
 
 const String _kEllipsis = '\u2026';
@@ -15,7 +15,8 @@ const String _kLineSeparator = '\u2028';
 ///
 /// [onTap] is called when a tagged text is tapped.
 class DetectableText extends StatefulWidget {
-  DetectableText({
+  const DetectableText({
+    Key? key,
     required this.text,
     required this.detectionRegExp,
     this.basicStyle,
@@ -39,10 +40,10 @@ class DetectableText extends StatefulWidget {
     this.colorClickableText,
     this.trimLength = 240,
     this.trimLines = 2,
-    this.trimMode = TrimMode.Length,
-    this.delimiter = _kEllipsis + ' ',
+    this.trimMode = TrimMode.length,
+    this.delimiter = '$_kEllipsis ',
     this.callback,
-  });
+  }) : super(key: key);
 
   final String text;
   final TextStyle? basicStyle;
@@ -61,7 +62,7 @@ class DetectableText extends StatefulWidget {
   final RegExp detectionRegExp;
   final String delimiter;
 
-  /// Used on TrimMode.Length
+  /// Used on TrimMode.length
   final int trimLength;
 
   /// A callback function that returns a [TextStyle] for detected text, passing
@@ -71,7 +72,7 @@ class DetectableText extends StatefulWidget {
   /// Used on TrimMode.Lines
   final int trimLines;
 
-  /// Determines the type of trim. TrimMode.Length takes into account
+  /// Determines the type of trim. TrimMode.length takes into account
   /// the number of letters, while TrimMode.Lines takes into account
   /// the number of lines
   final TrimMode trimMode;
@@ -90,10 +91,10 @@ class DetectableText extends StatefulWidget {
   final Color? colorClickableText;
 
   @override
-  _DetectableTextState createState() => _DetectableTextState();
+  DetectableTextState createState() => DetectableTextState();
 }
 
-class _DetectableTextState extends State<DetectableText> {
+class DetectableTextState extends State<DetectableText> {
   bool _readMore = true;
 
   void _onTapLink() {
@@ -107,30 +108,30 @@ class _DetectableTextState extends State<DetectableText> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final TextStyle style = theme.textTheme.subtitle1!.merge(widget.basicStyle);
-    final _defaultLessStyle = widget.lessStyle ?? style;
-    final _defaultMoreStyle = widget.moreStyle ?? style;
+    final defaultLessStyle = widget.lessStyle ?? style;
+    final defaultMoreStyle = widget.moreStyle ?? style;
     final textDirection = widget.textDirection ?? Directionality.of(context);
     final overflow = DefaultTextStyle.of(context).overflow;
     final locale = widget.locale ?? Localizations.maybeLocaleOf(context);
-    final _defaultDelimiterStyle = style;
+    final defaultDelimiterStyle = style;
 
-    TextSpan link = TextSpan(
+    final TextSpan link = TextSpan(
       text: _readMore ? widget.trimCollapsedText : widget.trimExpandedText,
-      style: _readMore ? _defaultMoreStyle : _defaultLessStyle,
+      style: _readMore ? defaultMoreStyle : defaultLessStyle,
       recognizer: TapGestureRecognizer()..onTap = _onTapLink,
     );
 
-    TextSpan _delimiter = TextSpan(
+    final TextSpan delimiter = TextSpan(
       text: _readMore
           ? widget.trimCollapsedText.isNotEmpty
               ? widget.delimiter
               : ''
           : '',
-      style: _defaultDelimiterStyle,
+      style: defaultDelimiterStyle,
       recognizer: TapGestureRecognizer()..onTap = _onTapLink,
     );
 
-    Widget result = LayoutBuilder(
+    final Widget result = LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         assert(constraints.hasBoundedWidth);
         final double maxWidth = constraints.maxWidth;
@@ -146,7 +147,7 @@ class _DetectableTextState extends State<DetectableText> {
         );
 
         // Layout and measure link
-        TextPainter textPainter = TextPainter(
+        final TextPainter textPainter = TextPainter(
           text: link,
           textAlign: widget.textAlign,
           textDirection: textDirection,
@@ -159,7 +160,7 @@ class _DetectableTextState extends State<DetectableText> {
         final linkSize = textPainter.size;
 
         // Layout and measure delimiter
-        textPainter.text = _delimiter;
+        textPainter.text = delimiter;
         textPainter.layout(minWidth: 0, maxWidth: maxWidth);
         final delimiterSize = textPainter.size;
 
@@ -182,16 +183,16 @@ class _DetectableTextState extends State<DetectableText> {
           ));
           endIndex = textPainter.getOffsetBefore(pos.offset) ?? 0;
         } else {
-          var pos = textPainter.getPositionForOffset(
+          final pos = textPainter.getPositionForOffset(
             textSize.bottomLeft(Offset.zero),
           );
           endIndex = pos.offset;
           linkLongerThanLine = true;
         }
 
-        var textSpan;
+        TextSpan textSpan;
         switch (widget.trimMode) {
-          case TrimMode.Length:
+          case TrimMode.length:
             if (widget.trimLength < widget.text.length) {
               // textSpan = TextSpan(
               //   style: style,
@@ -211,7 +212,7 @@ class _DetectableTextState extends State<DetectableText> {
                         (linkLongerThanLine ? _kLineSeparator : '')
                     : widget.text,
                 detectionRegExp: widget.detectionRegExp,
-                children: <TextSpan>[_delimiter, link],
+                children: <TextSpan>[delimiter, link],
               );
             } else {
               textSpan = getDetectedTextSpan(
@@ -224,7 +225,7 @@ class _DetectableTextState extends State<DetectableText> {
               );
             }
             break;
-          case TrimMode.Line:
+          case TrimMode.line:
             if (textPainter.didExceedMaxLines) {
               // textSpan = TextSpan(
               //   style: style,
@@ -245,7 +246,7 @@ class _DetectableTextState extends State<DetectableText> {
                         (linkLongerThanLine ? _kLineSeparator : '')
                     : widget.text,
                 detectionRegExp: widget.detectionRegExp,
-                children: <TextSpan>[_delimiter, link],
+                children: <TextSpan>[delimiter, link],
               );
             } else {
               textSpan = getDetectedTextSpan(

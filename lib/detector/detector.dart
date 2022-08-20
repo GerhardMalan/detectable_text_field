@@ -4,7 +4,8 @@ import 'package:flutter/cupertino.dart';
 class Detection extends Comparable<Detection> {
   Detection({required this.range, this.emojiStartPoint});
 
-  static Detection empty() => Detection(range: TextRange(start: -1, end: -1));
+  static Detection empty() =>
+      Detection(range: const TextRange(start: -1, end: -1));
 
   bool get isEmpty => range.start == -1 && range.end == -1;
 
@@ -113,12 +114,12 @@ class Detector {
         .toList();
 
     /// This is to avoid the error caused by 'regExp' which counts the emoji's length 1.
-    emojiMatches.forEach((emojiMatch) {
+    for (var emojiMatch in emojiMatches) {
       final emojiLength = emojiMatch.group(0)!.length;
-      final replacementText = "a" * emojiLength;
+      final replacementText = 'a' * emojiLength;
       copiedText = copiedText.replaceRange(
           emojiMatch.start, emojiMatch.end, replacementText);
-    });
+    }
 
     final tags = detectionRegExp.allMatches(copiedText).toList();
     if (tags.isEmpty) {

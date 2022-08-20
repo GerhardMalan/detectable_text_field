@@ -1,42 +1,44 @@
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/functions.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  final _urlRegex = "((http|https)://)(www.)?" +
-      "[a-zA-Z0-9@:%._\\+~#?&//=]" +
-      "{2,256}\\.[a-z]" +
-      "{2,6}\\b([-a-zA-Z0-9@:%" +
-      "._\\+~#?&//=]*)";
+  const urlRegex =
+      '((http|https)://)(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)';
   test(
-    "url detection test",
+    'url detection test',
     () {
       final regex = RegExp(
-        _urlRegex,
+        urlRegex,
         caseSensitive: false,
         dotAll: true,
       );
-      final source = "http://foo.com/blah_blah";
+      const source = 'http://foo.com/blah_blah';
       final matches = extractDetections(source, regex);
-      print(matches);
+      if (kDebugMode) {
+        print(matches);
+      }
       expect(regex.hasMatch(source), true);
     },
   );
   test(
-    "url detection test with hashTags",
+    'url detection test with hashTags',
     () {
       final regex = RegExp(
-        '(?!\\n)(?:^|\\s)([#@]([$detectionContentLetters]+))|$_urlRegex',
+        '(?!\\n)(?:^|\\s)([#@]([$detectionContentLetters]+))|$urlRegex',
       );
-      final source =
-          "Stop dhttp://foo.com/blah_blah oio#firebase notDetectThis @hello noDetection";
+      const source =
+          'Stop dhttp://foo.com/blah_blah oio#firebase notDetectThis @hello noDetection';
       final matches = extractDetections(source, regex);
-      print(matches);
+      if (kDebugMode) {
+        print(matches);
+      }
       expect(regex.hasMatch(source), true);
     },
   );
   test(
-    "detectionRegExp must return proper regExp",
+    'detectionRegExp must return proper regExp',
     () {
       expect(detectionRegExp(), hashTagAtSignUrlRegExp);
       expect(detectionRegExp(hashTag: false), atSignUrlRegExp);

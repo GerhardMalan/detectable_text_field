@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
 import 'detector/detector.dart';
 
 /// Check if the text has detection
@@ -71,7 +70,7 @@ TextSpan getDetectedTextSpan({
 
 TextSpan getDetectedTextSpanWithExtraChild(
     {
-      // required TextStyle decoratedStyle,
+    // required TextStyle decoratedStyle,
     required TextStyle? Function(String) detectedStyleCallback,
     required TextStyle basicStyle,
     required String source,
@@ -90,7 +89,7 @@ TextSpan getDetectedTextSpanWithExtraChild(
     );
   } else {
     detections.sort();
-    List<InlineSpan> span = detections
+    final List<InlineSpan> span = detections
         .asMap()
         .map(
           (index, item) {

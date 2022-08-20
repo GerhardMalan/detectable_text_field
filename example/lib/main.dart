@@ -30,7 +30,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Detectable text field sample"),
+        title: Text('Detectable text field sample'),
       ),
       body: Center(
         child: Padding(
@@ -43,13 +43,13 @@ class MyHomePage extends StatelessWidget {
                 trimLines: 1,
                 detectedStyleCallback: _callback,
                 colorClickableText: Colors.pink,
-                trimMode: TrimMode.Line,
+                trimMode: TrimMode.line,
                 trimCollapsedText: 'more',
                 trimExpandedText: '...less',
                 text:
-                    "Welcome to #Detectable @TextField http://www.google.com this is sample text we are texting the feed text here. Welcome to #Detectable @TextField this is sample text we are texting the feed text here",
+                    'Welcome to #Detectable @TextField http://www.google.com this is sample text we are texting the feed text here. Welcome to #Detectable @TextField this is sample text we are texting the feed text here',
                 detectionRegExp: RegExp(
-                  "(?!\\n)(?:^|\\s)([#@]([$detectionContentLetters]+))|$urlRegexContent",
+                  '(?!\\n)(?:^|\\s)([#@]([$detectionContentLetters]+))|$urlRegexContent',
                   multiLine: true,
                 ),
                 callback: (bool readMore) {

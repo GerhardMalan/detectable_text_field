@@ -27,22 +27,19 @@ const detectionContentLetters = _symbols +
     _arabicLetters +
     _thaiLetters;
 
-const urlRegexContent = "((http|https)://)(www.)?" +
-    "[a-zA-Z0-9@:%._\\+~#?&//=]" +
-    "{2,256}\\.[a-z]" +
-    "{2,6}\\b([-a-zA-Z0-9@:%" +
-    "._\\+~#?&//=]*)";
+const urlRegexContent = '((http|https)://)(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]'
+    '{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)';
 
 /// Regular expression to extract hashTag
 ///
 /// Supports English, Japanese, Korean, Spanish, Arabic, and Thai
 final hashTagRegExp = RegExp(
-  "(?!\\n)(?:^|\\s)(#([$detectionContentLetters]+))",
+  '(?!\\n)(?:^|\\s)(#([$detectionContentLetters]+))',
   multiLine: true,
 );
 
 final atSignRegExp = RegExp(
-  "(?!\\n)(?:^|\\s)([@]([$detectionContentLetters]+))",
+  '(?!\\n)(?:^|\\s)([@]([$detectionContentLetters]+))',
   multiLine: true,
 );
 
@@ -53,22 +50,22 @@ final urlRegex = RegExp(
 
 /// Regular expression when you select decorateAtSign
 final hashTagAtSignRegExp = RegExp(
-  "(?!\\n)(?:^|\\s)([#@]([$detectionContentLetters]+))",
+  '(?!\\n)(?:^|\\s)([#@]([$detectionContentLetters]+))',
   multiLine: true,
 );
 
 final hashTagUrlRegExp = RegExp(
-  "(?!\\n)(?:^|\\s)([#]([$detectionContentLetters]+))|$urlRegexContent",
+  '(?!\\n)(?:^|\\s)([#]([$detectionContentLetters]+))|$urlRegexContent',
   multiLine: true,
 );
 
 final hashTagAtSignUrlRegExp = RegExp(
-  "(?!\\n)(?:^|\\s)([#@]([$detectionContentLetters]+))|$urlRegexContent",
+  '(?!\\n)(?:^|\\s)([#@]([$detectionContentLetters]+))|$urlRegexContent',
   multiLine: true,
 );
 
 final atSignUrlRegExp = RegExp(
-  "(?!\\n)(?:^|\\s)([@]([$detectionContentLetters]+))|$urlRegexContent",
+  '(?!\\n)(?:^|\\s)([@]([$detectionContentLetters]+))|$urlRegexContent',
   multiLine: true,
 );
 
@@ -109,6 +106,6 @@ RegExp? detectionRegExp({
     return urlRegex;
   }
   assert(false,
-      "Unexpected condition: hashTag:$hashTag, atSign:$atSign, url:$url");
+      'Unexpected condition: hashTag:$hashTag, atSign:$atSign, url:$url');
   return null;
 }
